@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"os/signal"
 	"strings"
+	"syscall"
 )
 
 const (
@@ -27,6 +29,22 @@ type Pet struct {
 	Energy    int    `json:"energy"`
 	Level     int    `json:"level"`
 	XP        int    `json:"xp"`
+}
+
+func getSaveFilePath() string {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		return "pet.json"
+	}
+
+	folderPath := homeDir + "/.gotermi"
+
+	err = os.MkdirAll(folderPath, 0755)
+	if err != nil {
+		return "pet.json"
+	}
+
+	return folderPath + "/pet.json"
 }
 
 func fixStats(pet *Pet) {
@@ -54,12 +72,19 @@ func fixStats(pet *Pet) {
 	if pet.Level <= 0 {
 		pet.Level = 1
 	}
+
+	if pet.XP < 0 {
+		pet.XP = 0
+	}
+	if pet.XP > 100 {
+		pet.XP = 100
+	}
 }
 
 func addXP(pet *Pet, amount int) {
 	pet.XP += amount
 
-	if pet.XP >= 100 {
+	for pet.XP >= 100 {
 		pet.Level++
 		pet.XP -= 100
 		fmt.Println(Green + "🎉 Level up! " + pet.Name + " is now level " + fmt.Sprint(pet.Level) + "!" + Reset)
@@ -73,7 +98,7 @@ func savePet(pet Pet) {
 		return
 	}
 
-	err = os.WriteFile("pet.json", data, 0644)
+	err = os.WriteFile(getSaveFilePath(), data, 0644)
 	if err != nil {
 		fmt.Println(Red+"Error saving pet:"+Reset, err)
 		return
@@ -107,7 +132,7 @@ func createNewPet() Pet {
 }
 
 func loadPet() Pet {
-	data, err := os.ReadFile("pet.json")
+	data, err := os.ReadFile(getSaveFilePath())
 
 	if err != nil {
 		fmt.Println(Yellow + "No saved pet found. Let's create one." + Reset)
@@ -134,6 +159,27 @@ func loadPet() Pet {
 
 	fmt.Println(Green + "Loaded saved pet 💾" + Reset)
 	return pet
+}
+
+func handleExitSignal(pet *Pet) {
+	signalChannel := make(chan os.Signal, 1)
+
+	signal.Notify(signalChannel, os.Interrupt, syscall.SIGTERM)
+
+	go func() {
+		<-signalChannel
+
+		fmt.Println()
+		fmt.Println(Yellow + "Ctrl+C detected. Saving pet before exit..." + Reset)
+
+		fixStats(pet)
+		savePet(*pet)
+
+		fmt.Println(Green + "Pet saved successfully 💾" + Reset)
+		fmt.Println(Purple + "Bye bye from " + pet.Name + " 🐹" + Reset)
+
+		os.Exit(0)
+	}()
 }
 
 func getMoodFace(pet Pet) string {
@@ -174,8 +220,8 @@ func showAsciiPet(pet Pet) {
 	fmt.Println(Purple + getMoodFace(pet) + Reset)
 
 	fmt.Println(Cyan + "   ─────────────" + Reset)
-	fmt.Println(Bold + "      " + strings.ToUpper(pet.Name) + Reset)
-	fmt.Println(Cyan + "   🌸🌸🌸🌸🌸🌸" + Reset)
+	fmt.Println(Bold + "      " + strings.ToUpper(pet.Name) + "🌸" + Reset)
+	fmt.Println(Cyan + "   🌸🌸🌸" + Reset)
 	fmt.Println(Cyan + "   ─────────────" + Reset)
 }
 
@@ -198,17 +244,19 @@ func makeBar(value int) string {
 }
 
 func showStatus(pet Pet) {
-	fmt.Println(Cyan + "-----------------------" + Reset)
-	fmt.Println(Bold+"Pet name:"+Reset, pet.Name)
-	fmt.Println(Purple+"Level:"+Reset, pet.Level)
-	fmt.Println(Purple+"XP:"+Reset, makeBar(pet.XP), pet.XP, "/ 100")
-	fmt.Println(Yellow+"Hunger:"+Reset, makeBar(pet.Hunger), pet.Hunger, "/ 100")
-	fmt.Println(Green+"Happiness:"+Reset, makeBar(pet.Happiness), pet.Happiness, "/ 100")
-	fmt.Println(Blue+"Energy:"+Reset, makeBar(pet.Energy), pet.Energy, "/ 100")
+	fmt.Println(Cyan + "\n╭────────────────────╮" + Reset)
+	fmt.Println(Bold+"  "+pet.Name+" 🌸"+Reset)
+	fmt.Println(Cyan + "  ├────────────────────┤" + Reset)
 
-	fmt.Println(Cyan + "Keep " + pet.Name + " alive. No excuses, pet parent. 🐹" + Reset)
+	fmt.Println(Purple+"  Level     "+Reset, pet.Level)
+	fmt.Println(Purple+"  XP        "+Reset, makeBar(pet.XP), fmt.Sprintf("%d%%", pet.XP))
+	fmt.Println(Yellow+"  Hunger    "+Reset, makeBar(pet.Hunger), fmt.Sprintf("%d%%", pet.Hunger))
+	fmt.Println(Green+"  Happy     "+Reset, makeBar(pet.Happiness), fmt.Sprintf("%d%%", pet.Happiness))
+	fmt.Println(Blue+"  Energy    "+Reset, makeBar(pet.Energy), fmt.Sprintf("%d%%", pet.Energy))
 
-	fmt.Println(Cyan + "-----------------------" + Reset)
+	fmt.Println(Cyan + "  ├────────────────────┤" + Reset)
+	fmt.Println("  Keep me alive! 🐹")
+	fmt.Println(Cyan + "╰────────────────────╯" + Reset)
 }
 
 func feedPet(pet *Pet) {
@@ -254,23 +302,23 @@ func randomEvent(pet *Pet) {
 	event := rand.Intn(5)
 
 	if event == 0 {
-		fmt.Println(Green+Reset, pet.Name, "found a cookie 🍪")
+		fmt.Println(Green+"Random event:"+Reset, pet.Name, "found a cookie 🍪")
 		pet.Happiness += 5
 		addXP(pet, 5)
 	} else if event == 1 {
-		fmt.Println(Yellow+Reset, pet.Name, "got bored 😭")
+		fmt.Println(Yellow+"Random event:"+Reset, pet.Name, "got bored 😭")
 		pet.Happiness -= 5
 	} else if event == 2 {
-		fmt.Println(Blue+Reset, pet.Name, "ran around the room 🏃")
+		fmt.Println(Blue+"Random event:"+Reset, pet.Name, "ran around the room 🏃")
 		pet.Energy -= 10
 		pet.Hunger += 5
 		addXP(pet, 5)
 	} else if event == 3 {
-		fmt.Println(Purple+Reset, pet.Name, "found a shiny terminal bug 🐞")
+		fmt.Println(Purple+"Random event:"+Reset, pet.Name, "found a shiny terminal bug 🐞")
 		pet.Happiness += 8
 		addXP(pet, 10)
 	} else {
-		fmt.Println(Cyan+Reset, pet.Name, "is staring at you silently 👀")
+		fmt.Println(Cyan+"Random event:"+Reset, pet.Name, "is staring at you silently 👀")
 		pet.Hunger += 5
 	}
 }
@@ -295,6 +343,7 @@ func showMenu() {
 
 func main() {
 	pet := loadPet()
+	handleExitSignal(&pet)
 
 	fmt.Println(Bold + Cyan + "Welcome to Gotermi 🐹" + Reset)
 	fmt.Println("Your terminal pet is alive.")
