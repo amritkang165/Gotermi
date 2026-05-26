@@ -1,10 +1,10 @@
 # Gotermi 🐹🌸
 
-Gotermi is a cute terminal pet built with Go.
+> A cute terminal pet that lives inside your command line.
 
-You can feed your pet, play with it, let it sleep, check its mood, gain XP, level up, and save progress using JSON.
+Gotermi is a Go-based CLI pet app where users can create a virtual pet, interact with it, track stats, gain XP, level up, and save progress locally.
 
-It runs directly inside your terminal.
+Built for people who want their terminal to feel a little less boring and a little more alive.
 
 ---
 
@@ -38,104 +38,74 @@ Your terminal pet is alive.
 
 ---
 
+## What is Gotermi?
+
+Gotermi is a small terminal pet game built with Go.
+
+Users can create their own pet, feed it, play with it, let it sleep, check its mood, and continue progress anytime because the pet data is saved locally.
+
+It runs directly inside the terminal and can also be installed as a global command, so users can open Gotermi from anywhere.
+
+---
+
 ## Features
 
-- Terminal-based pet game
-- ASCII pet UI
-- Colored terminal output
-- Hunger, happiness, and energy stats
-- XP and level system
-- Random events
-- Mood-based pet expressions
-- JSON save/load system
-- Auto-save after actions
-- Ctrl+C safe exit support
-- Saves pet data locally
-- Can be installed as a global terminal command
+| Feature | Description |
+|---|---|
+| Terminal Pet | A virtual pet that runs inside the command line |
+| Custom Pet Name | Users can name their own pet on first run |
+| ASCII Pet UI | Cute terminal-based pet visuals |
+| Pet Stats | Tracks hunger, happiness, energy, XP, and level |
+| Mood System | Pet mood changes based on its stats |
+| XP System | Users gain XP by interacting with the pet |
+| Level System | Pet levels up as XP increases |
+| Random Events | Small random changes make the pet feel alive |
+| JSON Save System | Pet progress is saved locally |
+| Auto Save | Data saves automatically after actions |
+| Safe Exit | Handles exit without losing progress |
+| Global Command | Can be installed and used as `gotermi` from anywhere |
 
 ---
 
-## Requirements
+## Tech Stack
 
-You need Go installed on your system.
-
-Check if Go is installed:
-
-```bash
-go version
-```
-
-If Go is installed, you will see something like:
-
-```bash
-go version go1.xx.x darwin/arm64
-```
-
-If Go is not installed, download and install it from:
-
-```bash
-https://go.dev/dl/
-```
-
-After installation, close and reopen your terminal, then check again:
-
-```bash
-go version
-```
+| Area | Technology |
+|---|---|
+| Language | Go |
+| Storage | JSON |
+| Interface | CLI |
+| UI | ASCII Art |
+| Terminal Styling | ANSI Colors |
+| Data Handling | Go Structs + File Handling |
 
 ---
 
-## Installation and Setup
+## Quick Start
 
-### 1. Clone the repository
-
-Replace the URL below with the actual Gotermi GitHub repo link.
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
-```
-
-Example:
-
-```bash
-git clone https://github.com/amritkang165/Gotermi.git
-```
-
----
-
-### 2. Go inside the project folder
-
-```bash
 cd YOUR_REPO_NAME
 ```
 
 Example:
 
 ```bash
+git clone https://github.com/amritkang165/Gotermi.git
 cd Gotermi
 ```
 
----
-
-### 3. Run Gotermi directly
+### 2. Run Gotermi
 
 ```bash
 go run main.go
 ```
 
-This starts Gotermi directly from the source code.
-
-On the first run, Gotermi will ask you to name your pet:
+On the first run, Gotermi will ask for a pet name.
 
 ```bash
 Name your pet:
-```
-
-Type your pet name and press Enter.
-
-Example:
-
-```bash
 Chunari
 ```
 
@@ -143,45 +113,16 @@ After that, your pet will be created and saved automatically.
 
 ---
 
-## Build the App
+## Install Gotermi as a Terminal Command
 
-If you want to create a runnable executable file, use:
-
-```bash
-go build -o gotermi
-```
-
-This creates a file named:
-
-```bash
-gotermi
-```
-
-Now run it using:
-
-```bash
-./gotermi
-```
-
----
-
-## Install Gotermi as a Global Terminal Command
-
-After building the app, you can install it globally so you can run Gotermi from anywhere in your terminal.
-
-First build the app:
+To use Gotermi from anywhere in your terminal, build and install it:
 
 ```bash
 go build -o gotermi
-```
-
-Then move it to `/usr/local/bin`:
-
-```bash
 sudo mv gotermi /usr/local/bin/
 ```
 
-Now you can run Gotermi from anywhere:
+Now run:
 
 ```bash
 gotermi
@@ -194,84 +135,47 @@ cd ~
 gotermi
 ```
 
-If Gotermi opens, installation worked.
-
----
-
-## What Does `sudo` Mean?
-
-`sudo` means:
+After editing the code, rebuild and reinstall:
 
 ```bash
-superuser do
-```
-
-It runs a command with admin permission.
-
-This is needed because `/usr/local/bin/` is a protected folder.
-
-When you run:
-
-```bash
+go build -o gotermi
 sudo mv gotermi /usr/local/bin/
 ```
 
-your system may ask for your computer password.
+---
 
-Type your password and press Enter.
+## Usage
 
-Important:
+After starting Gotermi, users can choose actions from the terminal menu.
 
-When typing the password, nothing may appear on screen. No dots, no stars, nothing.
+Example actions:
 
-That is normal. Just type the password and press Enter.
+```bash
+1. Feed pet
+2. Play with pet
+3. Let pet sleep
+4. Check status
+5. Exit
+```
 
-Use `sudo` carefully. Only use it when you understand what the command does.
+Each action changes the pet stats.
+
+| Action | Effect |
+|---|---|
+| Feed | Reduces hunger |
+| Play | Increases happiness and uses energy |
+| Sleep | Restores energy |
+| Status | Shows current pet stats |
+| Exit | Saves and closes the app |
 
 ---
 
-## Why Move Gotermi to `/usr/local/bin/`?
+## Saved Data
 
-Your terminal looks inside certain folders to find commands.
-
-One of those folders is:
-
-```bash
-/usr/local/bin/
-```
-
-When you move the `gotermi` executable there, your terminal can find it from anywhere.
-
-That means instead of running:
-
-```bash
-./gotermi
-```
-
-inside the project folder, you can simply run:
-
-```bash
-gotermi
-```
-
-from any folder.
-
----
-
-## Where Pet Data Is Saved
-
-Gotermi saves your pet data here:
+Gotermi saves pet data locally at:
 
 ```bash
 ~/.gotermi/pet.json
-```
-
-This keeps the saved pet data in your home directory instead of creating random `pet.json` files everywhere.
-
-To view your saved pet data:
-
-```bash
-cat ~/.gotermi/pet.json
 ```
 
 Example saved data:
@@ -289,43 +193,9 @@ Example saved data:
 
 ---
 
-## How to Create Your Own Pet
+## Reset Pet
 
-Run Gotermi:
-
-```bash
-gotermi
-```
-
-Or, if you are running from source:
-
-```bash
-go run main.go
-```
-
-On first run, it will ask:
-
-```bash
-Name your pet:
-```
-
-Type your pet name.
-
-Example:
-
-```bash
-Momo
-```
-
-Press Enter.
-
-Gotermi will create your pet and save it automatically.
-
----
-
-## How to Reset Your Pet
-
-If you want to delete your current pet and create a new one, delete the saved JSON file:
+To reset the current pet and create a new one:
 
 ```bash
 rm ~/.gotermi/pet.json
@@ -337,138 +207,26 @@ Then run Gotermi again:
 gotermi
 ```
 
-Or:
+or:
 
 ```bash
 go run main.go
-```
-
-Gotermi will ask you to create a new pet again.
-
----
-
-## How to Update Gotermi After Changing Code
-
-If you edit `main.go`, the global `gotermi` command will not update automatically.
-
-Why?
-
-Because the global command is a compiled binary stored here:
-
-```bash
-/usr/local/bin/gotermi
-```
-
-Your source code is here:
-
-```bash
-main.go
-```
-
-The flow is:
-
-```bash
-main.go → go build → gotermi executable → /usr/local/bin/gotermi
-```
-
-So after editing the code, rebuild and reinstall:
-
-```bash
-go build -o gotermi
-sudo mv gotermi /usr/local/bin/
-```
-
-Then run:
-
-```bash
-gotermi
-```
-
-Now the latest version will run.
-
----
-
-## Development Workflow
-
-Use this while coding and testing:
-
-```bash
-go run main.go
-```
-
-Use this when you want to build the app:
-
-```bash
-go build -o gotermi
-```
-
-Use this when you want to install or update the global command:
-
-```bash
-sudo mv gotermi /usr/local/bin/
-```
-
-Complete workflow:
-
-```bash
-cd Gotermi
-go run main.go
-go build -o gotermi
-sudo mv gotermi /usr/local/bin/
-gotermi
 ```
 
 ---
 
 ## Common Commands
 
-Run directly from source:
-
-```bash
-go run main.go
-```
-
-Build executable:
-
-```bash
-go build -o gotermi
-```
-
-Run built executable locally:
-
-```bash
-./gotermi
-```
-
-Install globally:
-
-```bash
-sudo mv gotermi /usr/local/bin/
-```
-
-Run globally:
-
-```bash
-gotermi
-```
-
-View saved pet data:
-
-```bash
-cat ~/.gotermi/pet.json
-```
-
-Reset pet:
-
-```bash
-rm ~/.gotermi/pet.json
-```
-
-Check Go version:
-
-```bash
-go version
-```
+| Task | Command |
+|---|---|
+| Run from source | `go run main.go` |
+| Build executable | `go build -o gotermi` |
+| Run built executable | `./gotermi` |
+| Install globally | `sudo mv gotermi /usr/local/bin/` |
+| Run globally | `gotermi` |
+| View saved data | `cat ~/.gotermi/pet.json` |
+| Reset pet | `rm ~/.gotermi/pet.json` |
+| Check Go version | `go version` |
 
 ---
 
@@ -480,229 +238,97 @@ Gotermi/
 └── README.md
 ```
 
-After global installation, the executable is stored here:
+After running Gotermi:
 
 ```bash
-/usr/local/bin/gotermi
-```
-
-Pet data is stored here:
-
-```bash
-~/.gotermi/pet.json
+~/.gotermi/
+└── pet.json
 ```
 
 ---
 
-## How Gotermi Works
+## How It Works
 
-Gotermi uses a simple Go struct to store pet data:
+Gotermi stores pet information inside a Go struct.
 
 ```go
 type Pet struct {
-	Name      string `json:"name"`
-	Hunger    int    `json:"hunger"`
-	Happiness int    `json:"happiness"`
-	Energy    int    `json:"energy"`
-	Level     int    `json:"level"`
-	XP        int    `json:"xp"`
+    Name      string `json:"name"`
+    Hunger    int    `json:"hunger"`
+    Happiness int    `json:"happiness"`
+    Energy    int    `json:"energy"`
+    Level     int    `json:"level"`
+    XP        int    `json:"xp"`
 }
 ```
 
-The pet has:
+When the app starts, it loads saved pet data from the JSON file.
 
-- Name
-- Hunger
-- Happiness
-- Energy
-- Level
-- XP
-
-The data is saved into a JSON file so your pet does not reset every time you close the terminal.
+When users perform actions, Gotermi updates the pet stats and saves the new data automatically.
 
 ---
 
-## Why Are Struct Fields Capitalized?
+## Learning Goals
 
-In Go, JSON encoding works properly with exported fields.
+This project demonstrates:
 
-Exported fields start with capital letters.
-
-Correct:
-
-```go
-Name
-Hunger
-Happiness
-Energy
-```
-
-Wrong:
-
-```go
-name
-hunger
-happiness
-energy
-```
-
-If the fields are lowercase, Go’s JSON package cannot access them properly.
+- Building a CLI app in Go
+- Working with structs
+- Using pointers
+- Handling terminal input
+- Creating a menu-based program
+- Saving and loading JSON data
+- Managing local files and folders
+- Using ANSI colors in terminal output
+- Building a Go executable
+- Installing a custom terminal command
 
 ---
 
-## Terminal Colors
+## Roadmap
 
-Gotermi uses ANSI escape codes for colored terminal output.
+Possible future improvements:
 
-Example:
-
-```go
-const Green = "\033[32m"
-const Reset = "\033[0m"
-```
-
-Usage:
-
-```go
-fmt.Println(Green + "Pet saved successfully!" + Reset)
-```
-
-`Reset` is important because it turns the terminal color back to normal.
+- More pet types
+- Multiple pet support
+- More random events
+- Daily streak system
+- Pet health system
+- More moods and expressions
+- Custom themes
+- Better animations
+- Sound effects
+- Mini games inside the terminal
 
 ---
 
-## Troubleshooting
+## Contributing
 
-### `go: command not found`
+Contributions are welcome.
 
-Go is not installed or not added to your PATH.
+To contribute:
 
-Install Go from:
+1. Fork the repository
+2. Create a new branch
+3. Make your changes
+4. Commit your work
+5. Push your branch
+6. Open a pull request
 
 ```bash
-https://go.dev/dl/
-```
-
-Then restart your terminal and check:
-
-```bash
-go version
+git checkout -b feature/your-feature-name
+git add .
+git commit -m "Add your feature"
+git push origin feature/your-feature-name
 ```
 
 ---
 
-### `permission denied`
+## License
 
-If you get permission issues while moving the executable:
+This project is open source.
 
-```bash
-mv gotermi /usr/local/bin/
-```
-
-Use:
-
-```bash
-sudo mv gotermi /usr/local/bin/
-```
-
----
-
-### `gotermi: command not found`
-
-This means the executable is not installed globally or `/usr/local/bin` is not in your PATH.
-
-Try:
-
-```bash
-echo $PATH
-```
-
-If `/usr/local/bin` is missing, add it to your shell config.
-
-For zsh on Mac:
-
-```bash
-nano ~/.zshrc
-```
-
-Add this line:
-
-```bash
-export PATH="/usr/local/bin:$PATH"
-```
-
-Save and reload:
-
-```bash
-source ~/.zshrc
-```
-
-Then try:
-
-```bash
-gotermi
-```
-
----
-
-### Pet data is not resetting
-
-Delete the saved JSON file:
-
-```bash
-rm ~/.gotermi/pet.json
-```
-
-Then run Gotermi again:
-
-```bash
-gotermi
-```
-
----
-
-### I changed the code but `gotermi` still runs the old version
-
-Rebuild and reinstall:
-
-```bash
-go build -o gotermi
-sudo mv gotermi /usr/local/bin/
-```
-
-Then run:
-
-```bash
-gotermi
-```
-
----
-
-## Tech Used
-
-- Go
-- JSON
-- File handling
-- Terminal ANSI colors
-- CLI basics
-- ASCII UI
-
----
-
-## What This Project Demonstrates
-
-This project shows:
-
-- How to build a CLI app in Go
-- How to use structs
-- How to use pointers
-- How to take terminal input
-- How to create a menu loop
-- How to save and load JSON data
-- How to store app data in a hidden folder
-- How to use terminal colors
-- How to build a Go binary
-- How to install a custom terminal command
+You can add a license file such as MIT License if you want to define usage and contribution rules clearly.
 
 ---
 
@@ -714,6 +340,6 @@ After setup, users can run:
 gotermi
 ```
 
-from anywhere in their terminal and play with their own terminal pet.
+from anywhere in their terminal and take care of their own tiny terminal pet.
 
-Built with Go, JSON, terminal chaos, and emotional support from a tiny ASCII pet. 🐹🌸
+Built with Go, JSON, ASCII art, and terminal chaos. 🐹🌸
